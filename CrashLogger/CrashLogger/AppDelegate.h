@@ -2,7 +2,7 @@
 //  AppDelegate.h
 //  CrashLogger
 //
-//  Created by Intern on 12/1/15.
+//  Created by SS on 12/1/15.
 //  Copyright © 2015 Macadamian. All rights reserved.
 //
 
