@@ -2,7 +2,7 @@
 //  AppDelegate.m
 //  CrashLogger
 //
-//  Created by Intern on 12/1/15.
+//  Created by SS on 12/1/15.
 //  Copyright © 2015 Macadamian. All rights reserved.
 //
 
@@ -22,7 +22,18 @@
     UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
     navigationController.topViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
     splitViewController.delegate = self;
+    
+    // !!! Causing crashes of different types (Move these to CrashLoggerLib). Uncomment one of them to crash.
+    [[[NSArray alloc] init] objectAtIndex:2];   // Out of array bounds. Will throw NSException.
+    //@throw @"Throwed NSString(NSObject,id)";  // Throw NSString, which is NSObject,id. So catch(id) will catch it because it's id-type.
+    //@throw [[[NSString class] alloc] init];   // Check if class has alloc, init methods (!), then throw exceptions of any type like this, for example, [[[anyClassHere class] alloc] init]
+    
     return YES;
+}
+
+// global uncaught exception handler
+void uncaughtExceptionHandler(NSException *exception) {
+    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
