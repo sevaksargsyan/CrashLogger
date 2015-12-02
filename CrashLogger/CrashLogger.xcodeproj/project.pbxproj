@@ -52,7 +52,7 @@
 		EC42887E1C0DFEED0014570D /* CrashLoggerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CrashLoggerTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		EC4288801C0DFEEE0014570D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EC4288851C0DFEEE0014570D /* CrashLoggerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CrashLoggerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		EC4288891C0DFEEE0014570D /* CrashLoggerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CrashLoggerUITests.m; sourceTree = "<group>"; };
+		EC4288891C0DFEEE0014570D /* CrashLoggerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CrashLoggerUITests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		EC42888B1C0DFEEE0014570D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
