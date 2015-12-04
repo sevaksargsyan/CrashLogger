@@ -17,5 +17,5 @@
 
 #define CRLCurrentLineInfo ([[NSString alloc] initWithFormat:@"Function: %s\nLine: %d\nFile: %s",__PRETTY_FUNCTION__, __LINE__, __FILE__])
 #define CRLCurrentCallStack ([NSThread callStackSymbols])
-
-//NSLog(@"Call stack:\n%@\n\n%@\n",[NSThread callStackSymbols],[NSThread callStackReturnAddresses]);
+#define CRLCurrentCallStackAdresses ([NSThread callStackReturnAddresses])
+#define CRL [CrashLogger sharedInstance]

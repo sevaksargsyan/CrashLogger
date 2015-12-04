@@ -46,7 +46,7 @@
         [_logHandlers setObject:logHandler forKey:handlerID];
     } else {
         if ([_logHandlers objectForKey:handlerID]==logHandler){
-            NSLog(@"WARNING: Tried to register the same log handler. Skipping registration.\n"
+            NSLog(@"WARNING: Tried to register the same log handler.\nSkipping registration.\n"
                   "1) Make sure you want to register the same log handler.\n"
                   "2) If necessary, change handlerID for registering as another handler.\n");
         } else {
@@ -57,6 +57,47 @@
         return false;
     }
     return true;
+}
+
+
+- (BOOL) unregisterLogHandler: (NSString*) handlerID{
+    if ([_logHandlers objectForKey:handlerID]!=nil){
+        [_logHandlers removeObjectForKey:handlerID];
+    } else {
+        NSLog(@"WARNING: Tried to unregister non-existing log handler ID.\nSkipping unregistration.");
+        return false;
+    }
+    return true;
+}
+
+#pragma mark - Logging methods
+
+- (void) log: (NSString*) info {
+    if (_logHandlers.count==0){
+        NSLog(@"WARNING: Tried to log without log handlers. Log will be skipped.\n"
+              "Register log handlers before logging info.");
+        return;
+    }
+    
+    // Iterating through log handlers and sending them info to handle
+    id <LogHandlingProtocol> handler=nil;
+    for (id key in _logHandlers){
+        handler=[_logHandlers objectForKey:key];
+        if (handler!=nil){
+            if ([handler respondsToSelector:@selector(handle:)]){
+                [handler handle:info];
+            } else {
+                NSLog(@"WARNING: Can't pass information to log handler.\n"
+                      "Log handler did not respond to selector 'handle'.\n"
+                      "Make sure log handler is correct and conforms to log handling protocol.");
+                continue;
+            }
+        } else {
+            NSLog(@"WARNING: Encountered empty log handler. Skipping it.");
+            continue;
+        }
+    }
+    
 }
 
 #pragma mark - Safe blocks

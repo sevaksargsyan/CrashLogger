@@ -33,7 +33,7 @@ typedef NS_OPTIONS(NSUInteger, CRLEventLevel) {
 
 - (BOOL) registerLogHandler: (id <LogHandlingProtocol>) logHandler withID:(NSString*) handlerID;
 - (BOOL) registerLogHandler: (id <LogHandlingProtocol>) logHandler withID:(NSString*) handlerID forEventLevels:(CRLEventLevel) eventLevels;
-- (BOOL) unregisterLogHandler: (id <LogHandlingProtocol>) logHandler;
+- (BOOL) unregisterLogHandler: (NSString*) handlerID;
 
 #pragma mark - Logging methods
 

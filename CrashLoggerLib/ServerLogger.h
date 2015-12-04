@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "LogHandlingProtocol.h"
 
-@interface ServerLogger : NSObject
+@interface ServerLogger : NSObject <LogHandlingProtocol>
 
 - (BOOL) handle: (NSString*) log;
 
