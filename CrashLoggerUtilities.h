@@ -6,14 +6,14 @@
 //  Copyright © 2015 Macadamian. All rights reserved.
 //
 
-//#ifndef __CrashLoggerUtilities_H__
-//#define __CrashLoggerUtilities_H__
+#ifndef __CrashLoggerUtilities_H__
+#define __CrashLoggerUtilities_H__
 
+#import <Foundation/Foundation.h>
 #import <Foundation/NSException.h>
-#import <Foundation/NSString.h>
 
-@interface CrashLoggerUtilities
+@interface CrashLoggerUtilities : NSObject
 + (NSString*) NSExceptionToString: (NSException*) exception;
 @end
 
-//#endif
+#endif

@@ -16,7 +16,10 @@
 		EC4288741C0DFEED0014570D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EC4288721C0DFEED0014570D /* LaunchScreen.storyboard */; };
 		EC42887F1C0DFEED0014570D /* CrashLoggerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EC42887E1C0DFEED0014570D /* CrashLoggerTests.m */; };
 		EC42888A1C0DFEEE0014570D /* CrashLoggerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = EC4288891C0DFEEE0014570D /* CrashLoggerUITests.m */; };
-		EC8E1BE01C0F5BB700A18FFC /* CrashLoggerUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = EC8E1BDF1C0F5BB700A18FFC /* CrashLoggerUtilities.m */; settings = {ASSET_TAGS = (); }; };
+		EC9E528A1C1029CE00E28133 /* CrashLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = EC9E52891C1029CE00E28133 /* CrashLogger.m */; settings = {ASSET_TAGS = (); }; };
+		EC9E52911C117D3900E28133 /* CrashLoggerUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = EC9E52901C117D3900E28133 /* CrashLoggerUtilities.m */; settings = {ASSET_TAGS = (); }; };
+		EC9E52E01C11BF4200E28133 /* DebugLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = EC9E52DF1C11BF4200E28133 /* DebugLogger.m */; settings = {ASSET_TAGS = (); }; };
+		EC9E52E31C11C07100E28133 /* ServerLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = EC9E52E21C11C07100E28133 /* ServerLogger.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,9 +58,16 @@
 		EC4288851C0DFEEE0014570D /* CrashLoggerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CrashLoggerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC4288891C0DFEEE0014570D /* CrashLoggerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CrashLoggerUITests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		EC42888B1C0DFEEE0014570D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EC8E1BDD1C0F5BB700A18FFC /* CrashLoggerLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashLoggerLib.h; sourceTree = "<group>"; };
-		EC8E1BDE1C0F5BB700A18FFC /* CrashLoggerUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashLoggerUtilities.h; sourceTree = "<group>"; };
-		EC8E1BDF1C0F5BB700A18FFC /* CrashLoggerUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashLoggerUtilities.m; sourceTree = "<group>"; };
+		EC9E52881C1029CE00E28133 /* CrashLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashLogger.h; sourceTree = "<group>"; };
+		EC9E52891C1029CE00E28133 /* CrashLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashLogger.m; sourceTree = "<group>"; };
+		EC9E528B1C10440F00E28133 /* LogHandlingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogHandlingProtocol.h; sourceTree = "<group>"; };
+		EC9E528F1C117D3900E28133 /* CrashLoggerUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashLoggerUtilities.h; sourceTree = "<group>"; };
+		EC9E52901C117D3900E28133 /* CrashLoggerUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashLoggerUtilities.m; sourceTree = "<group>"; };
+		EC9E52921C11813F00E28133 /* CrashLoggerLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashLoggerLib.h; sourceTree = "<group>"; };
+		EC9E52DE1C11BF4200E28133 /* DebugLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugLogger.h; sourceTree = "<group>"; };
+		EC9E52DF1C11BF4200E28133 /* DebugLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugLogger.m; sourceTree = "<group>"; };
+		EC9E52E11C11C07100E28133 /* ServerLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerLogger.h; sourceTree = "<group>"; };
+		EC9E52E21C11C07100E28133 /* ServerLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerLogger.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,9 +163,16 @@
 		EC8E1BDC1C0F5BB700A18FFC /* CrashLoggerLib */ = {
 			isa = PBXGroup;
 			children = (
-				EC8E1BDD1C0F5BB700A18FFC /* CrashLoggerLib.h */,
-				EC8E1BDE1C0F5BB700A18FFC /* CrashLoggerUtilities.h */,
-				EC8E1BDF1C0F5BB700A18FFC /* CrashLoggerUtilities.m */,
+				EC9E52881C1029CE00E28133 /* CrashLogger.h */,
+				EC9E52921C11813F00E28133 /* CrashLoggerLib.h */,
+				EC9E52891C1029CE00E28133 /* CrashLogger.m */,
+				EC9E528B1C10440F00E28133 /* LogHandlingProtocol.h */,
+				EC9E528F1C117D3900E28133 /* CrashLoggerUtilities.h */,
+				EC9E52901C117D3900E28133 /* CrashLoggerUtilities.m */,
+				EC9E52DE1C11BF4200E28133 /* DebugLogger.h */,
+				EC9E52DF1C11BF4200E28133 /* DebugLogger.m */,
+				EC9E52E11C11C07100E28133 /* ServerLogger.h */,
+				EC9E52E21C11C07100E28133 /* ServerLogger.m */,
 			);
 			name = CrashLoggerLib;
 			path = ../CrashLoggerLib;
@@ -294,10 +311,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EC8E1BE01C0F5BB700A18FFC /* CrashLoggerUtilities.m in Sources */,
+				EC9E52E31C11C07100E28133 /* ServerLogger.m in Sources */,
 				EC4288661C0DFEED0014570D /* AppDelegate.m in Sources */,
+				EC9E52E01C11BF4200E28133 /* DebugLogger.m in Sources */,
 				EC4288691C0DFEED0014570D /* MasterViewController.m in Sources */,
+				EC9E528A1C1029CE00E28133 /* CrashLogger.m in Sources */,
 				EC4288631C0DFEED0014570D /* main.m in Sources */,
+				EC9E52911C117D3900E28133 /* CrashLoggerUtilities.m in Sources */,
 				EC42886C1C0DFEED0014570D /* DetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
