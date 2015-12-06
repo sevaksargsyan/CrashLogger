@@ -6,11 +6,14 @@
 //  Copyright © 2015 Macadamian. All rights reserved.
 //
 
+#import <Foundation/NSException.h>
 #import "CrashLoggerUtilities.h"
 
 @implementation CrashLoggerUtilities
 
-+ (NSString*) NSExceptionToString: (NSException*) exception{
+// Convert NSException to string. Returns nil on failure
++ (NSString*) NSExceptionToString: (NSException*) exception {
+    if (exception==nil) return nil;
     
     // Converting array of call-stack lines into formatted string (using Fast Enumeration and integer is faster than traditional objectAtIndex)
     NSMutableString * strCallStackSymbols =[[NSMutableString alloc] init];
@@ -51,4 +54,19 @@
     return exceptionString;
 }
 
+
+// Tries to convert (exception) object to string. Returns nil on failure
++ (NSString*) ConvertToString: (id) object {
+    if (object==nil) return nil;
+    
+    if ([object isKindOfClass:[NSString class]]) {
+        return object;
+    }
+    
+    if ([object isKindOfClass:[NSException class]]){
+        return [self NSExceptionToString:object];
+    }
+    
+    return nil;
+}
 @end

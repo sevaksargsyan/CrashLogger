@@ -19,22 +19,15 @@
 
 @implementation AppDelegate
 
-
-// Global uncaught exception handler
-void uncaughtExceptionHandler(NSException *exception) {
-    NSLog(@"!!! Caught global uncaught exception.\nHere is full exception information about exception,\n which we can log now or send to server:\n");
-    NSLog(@"%@\n", [CrashLoggerUtilities NSExceptionToString:exception]);
-    NSLog(@"Exception was caught successfully.\n Now it will rethrow the exception, and next lines will be repeating");
-}
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
     UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
     navigationController.topViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
     splitViewController.delegate = self;
-    
-    NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+
+    // Set global uncaught exception handler to CrashLogger's handler
+    NSSetUncaughtExceptionHandler([CRL uncaughtExceptionHandler]);
     return YES;
 }
 
@@ -42,15 +35,16 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (BOOL)splitViewController:(UISplitViewController *)splitViewController collapseSecondaryViewController:(UIViewController *)secondaryViewController ontoPrimaryViewController:(UIViewController *)primaryViewController {
     
-    NSLog(@"\nCausing crash from:\n%@\n\n",CRLCurrentLineInfo);
+    NSLog(@"\nCausing crash from:\n%@\n\n",CRLCurrentLineInfo); // Log current function/line info using CrashLogger's CRLCurrentLineInfo
+    
     // Causing crashes of different types (Move these to CrashLoggerLib). Uncomment one of them to crash and check the logs.
     [[[NSArray alloc] init] objectAtIndex:2];   // Out of array bounds. Will throw NSException.
     //@throw @"Throwed NSString(NSObject,id)";  // Throw NSString, which is NSObject,id. So catch(id) will catch it because it's id-type.
     //@throw [[[NSString class] alloc] init];   // Check if class has alloc, init methods (!), then throw exceptions of any type like this, for example, [[[anyClassHere class] alloc] init]
     
-    // Log call stack at any time
-    //NSLog(@"Call stack:\n%@\n\n%@\n",[NSThread callStackSymbols],[NSThread callStackReturnAddresses]);
-    
+    // Can log call stack at any time using CrashLogger's CRLCurrentCallStack
+    //NSLog(@"Call stack:\n%@\n",CRLCurrentCallStack);
+          
     if ([secondaryViewController isKindOfClass:[UINavigationController class]] && [[(UINavigationController *)secondaryViewController topViewController] isKindOfClass:[DetailViewController class]] && ([(DetailViewController *)[(UINavigationController *)secondaryViewController topViewController] detailItem] == nil)) {
         // Return YES to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
         return YES;

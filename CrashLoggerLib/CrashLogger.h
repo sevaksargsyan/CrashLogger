@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "LogHandlingProtocol.h"
 
+// Types of events // Not used/implemented yet
 typedef NS_OPTIONS(NSUInteger, CRLEventLevel) {
     None        = 0,
     All         = NSUIntegerMax,
@@ -26,24 +27,30 @@ typedef NS_OPTIONS(NSUInteger, CRLEventLevel) {
 
 #pragma mark - Initialization and singleton
 
-+ (instancetype) sharedInstance;
-- (instancetype) init __attribute__((unavailable("use sharedInstance")));   // Prevent init call for preventing non-singleton instance creation
++ (instancetype) sharedInstance;                                            // Shared instance of singleton class
+- (instancetype) init __attribute__((unavailable("use sharedInstance")));   // Init method call prevention - for preventing non-singleton instance creation
 
 #pragma mark - Log handler registration
 
 - (BOOL) registerLogHandler: (id <LogHandlingProtocol>) logHandler withID:(NSString*) handlerID;
-- (BOOL) registerLogHandler: (id <LogHandlingProtocol>) logHandler withID:(NSString*) handlerID forEventLevels:(CRLEventLevel) eventLevels;
+//- (BOOL) registerLogHandler: (id <LogHandlingProtocol>) logHandler withID:(NSString*) handlerID forEventLevels:(CRLEventLevel) eventLevels;
 - (BOOL) unregisterLogHandler: (NSString*) handlerID;
 
 #pragma mark - Logging methods
 
-- (void) log: (NSString*) info;
-- (void) logFormatted: (NSString*) format info:(NSString*) info;
-- (void) logNSException: (NSException*) exception;
+- (void) log: (NSString*) format,...;
+- (void) logObject: (id) object;
+- (void) logNSString: (NSString*) info;
+
+#pragma mark - Global uncaught exception Handler
+
+// Returns pointer to CrashLogger's function which will handle global exceptions.
+// Set it as global handler using NSSetUncaughtExceptionHandler([... uncaughtExceptionHandler]) from functions [application:didFinish] or from main (before "return")
+- (NSUncaughtExceptionHandler*) uncaughtExceptionHandler;
 
 #pragma mark - Safe blocks
 
-// Executes block safely, and logs exceptions.
+// Safely executes the block and logs exceptions
 + (id)safeBlock:(id(^)(void))block;
 
 @end

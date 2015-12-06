@@ -10,5 +10,11 @@
 #import <Foundation/NSException.h>
 
 @interface CrashLoggerUtilities : NSObject
+
+// Convert NSException to string. Returns nil on failure
 + (NSString*) NSExceptionToString: (NSException*) exception;
+
+// Tries to convert (exception) object to string. Returns nil on failure
++ (NSString*) ConvertToString: (id) object;
+
 @end

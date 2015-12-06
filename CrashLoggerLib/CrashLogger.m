@@ -72,7 +72,41 @@
 
 #pragma mark - Logging methods
 
-- (void) log: (NSString*) info {
+- (void) log:(NSString *)format, ...{
+    va_list args;
+    va_start(args, format);
+    [self logNSString: [[NSString alloc]initWithFormat:format arguments:args]];
+    va_end(args);
+}
+
+- (void) logObject:(id)object {
+    if (_logHandlers.count==0){
+        NSLog(@"WARNING: Tried to log without log handlers. Log will be skipped.\n"
+              "Register log handlers before logging info.");
+        return;
+    }
+    
+    // Iterating through log handlers and sending them info to handle
+    id <LogHandlingProtocol> handler=nil;
+    for (id key in _logHandlers){
+        handler=[_logHandlers objectForKey:key];
+        if (handler!=nil){
+            if ([handler respondsToSelector:@selector(handleObject:)]){
+                [handler handleObject:object];
+            } else {
+                NSLog(@"WARNING: Can't pass information to log handler.\n"
+                      "Log handler did not respond to selector 'handle'.\n"
+                      "Make sure log handler is correct and conforms to log handling protocol.");
+                continue;
+            }
+        } else {
+            NSLog(@"WARNING: Encountered empty (nil) log handler. Skipping it.");
+            continue;
+        }
+    }
+}
+
+- (void) logNSString: (NSString*) info {
     if (_logHandlers.count==0){
         NSLog(@"WARNING: Tried to log without log handlers. Log will be skipped.\n"
               "Register log handlers before logging info.");
@@ -100,6 +134,20 @@
     
 }
 
+#pragma mark - Global uncaught exception Handler
+
+// Handle uncaught exceptions here
+void _uncaughtExceptionHandler(NSException* exception) {
+    [[CrashLogger sharedInstance] logObject:exception];
+    // There are three ways: 1) exit() here and don't wait for crash, 2) don't exit(), catch signal SIGABRT and handle it, 3) don't exit() and crash
+    // exit(0);
+}
+
+// Objective-C style wrapper for C-style function _uncaughtExceptionHandler(). Returns pointer function's pointer. Note: for handling exceptions, go to _uncaughtExceptionHandler function
+- (NSUncaughtExceptionHandler*) uncaughtExceptionHandler{
+    return &_uncaughtExceptionHandler;
+}
+
 #pragma mark - Safe blocks
 
 + (id)safeBlock:(id(^)(void))block{
@@ -107,13 +155,12 @@
     @try {
         block();
     }
+    @catch (NSString* exception){
+        [[CrashLogger sharedInstance] log:exception];
+    }
+    // Catch other exception types which are compatible with id type (such as NSObject, NSError). Logging their classes.
     @catch (id exception){
-        if ([exception class]==NSException.class){
-            NSLog(@"%@",[CrashLoggerUtilities NSExceptionToString:exception]);
-        } else {
-            // Catch other exception types which are compatible with id type (such as NSString, NSObject). Logging their classes.
-            NSLog(@"Unhandled exception of type %@", [exception class]);
-        }
+        [[CrashLogger sharedInstance] logObject:exception];
     }
     // Catch other exception types. This case should never happen as @throw only accepts object types. If it happens take care carefully
     @catch (...){

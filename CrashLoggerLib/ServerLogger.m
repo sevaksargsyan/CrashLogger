@@ -7,12 +7,12 @@
 //
 
 #import "ServerLogger.h"
-
+#import "CrashLoggerUtilities.h"
 
 @implementation ServerLogger
 
 - (BOOL) handle: (NSString*) log{
-    // Here we receive all log (like in XCode's Output window)
+    // Here we receive all the log (like in XCode's Output window)
     
     // ... TODO: Send log to server ...
     // Note: Use another thread with dispatch_async and use serial queues.
@@ -20,7 +20,7 @@
     
     // PROTOTYPE: sends request synchronously to server
     NSURL* url= [NSURL URLWithString: [NSString stringWithFormat:@"http://www.example.com/log.asp?log=%@", log]];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy: NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval: 10 ];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy: NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval: 10];
     [request setHTTPMethod: @"GET"];
     NSError *requestError = nil;
     NSURLResponse *urlResponse = nil;
@@ -33,4 +33,11 @@
     return true;
 }
 
+- (BOOL) handleObject:(id)object {
+    // If it's NSException (or derived type), then convert it to string and log as string
+    if ([object isKindOfClass:[NSException class]]){
+        return [self handle:[CrashLoggerUtilities NSExceptionToString:object]];
+    }
+    return false;
+}
 @end

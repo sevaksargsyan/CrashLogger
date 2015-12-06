@@ -11,13 +11,14 @@
 @protocol LogHandlingProtocol <NSObject>
 
 #pragma mark - Required methods and properties
-
 @required
 
 - (BOOL) handle: (NSString*) log;
+- (BOOL) handleObject: (id) object;
 
 #pragma mark - Optional methods and properties
-@optional // Note: Remember to check if [object respondsToSelector] before calling these methods.
+@optional   // Note: Remember to check if [object respondsToSelector] before calling these methods.
+
 - (BOOL) handleNSException: (NSException*) exception;
 - (BOOL) handleNSError: (NSError*) error;
 

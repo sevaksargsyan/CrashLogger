@@ -12,5 +12,6 @@
 @interface ServerLogger : NSObject <LogHandlingProtocol>
 
 - (BOOL) handle: (NSString*) log;
+- (BOOL) handleObject: (id) object;
 
 @end
