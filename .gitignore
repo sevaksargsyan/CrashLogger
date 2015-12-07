@@ -1,0 +1,6 @@
+# Ignore odd files of XCode, MacOSX/iOS
+
+.DS_Store
+
+*.xccheckout
+xcuserdata/
