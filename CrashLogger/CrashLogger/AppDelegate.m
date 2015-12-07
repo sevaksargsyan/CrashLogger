@@ -9,12 +9,15 @@
 #import "AppDelegate.h"
 #import "DetailViewController.h"
 
+#import <Foundation/Foundation.h>
+#import <Foundation/NSException.h>
+#import "CrashLoggerLib.h"
+
 @interface AppDelegate () <UISplitViewControllerDelegate>
 
 @end
 
 @implementation AppDelegate
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -22,19 +25,36 @@
     UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
     navigationController.topViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
     splitViewController.delegate = self;
+
+    // Set global uncaught exception handler to CrashLogger's handler
+    NSSetUncaughtExceptionHandler([CRL uncaughtExceptionHandler]);
+    return YES;
+}
+
+#pragma mark - Split view
+
+- (BOOL)splitViewController:(UISplitViewController *)splitViewController collapseSecondaryViewController:(UIViewController *)secondaryViewController ontoPrimaryViewController:(UIViewController *)primaryViewController {
     
-    // !!! Causing crashes of different types (Move these to CrashLoggerLib). Uncomment one of them to crash.
+    NSLog(@"\nCausing crash from:\n%@\n\n",CRLCurrentLineInfo); // Log current function/line info using CrashLogger's CRLCurrentLineInfo
+    
+    // Causing crashes of different types (Move these to CrashLoggerLib). Uncomment one of them to crash and check the logs.
     [[[NSArray alloc] init] objectAtIndex:2];   // Out of array bounds. Will throw NSException.
     //@throw @"Throwed NSString(NSObject,id)";  // Throw NSString, which is NSObject,id. So catch(id) will catch it because it's id-type.
     //@throw [[[NSString class] alloc] init];   // Check if class has alloc, init methods (!), then throw exceptions of any type like this, for example, [[[anyClassHere class] alloc] init]
     
-    return YES;
+    // Can log call stack at any time using CrashLogger's CRLCurrentCallStack
+    //NSLog(@"Call stack:\n%@\n",CRLCurrentCallStack);
+          
+    if ([secondaryViewController isKindOfClass:[UINavigationController class]] && [[(UINavigationController *)secondaryViewController topViewController] isKindOfClass:[DetailViewController class]] && ([(DetailViewController *)[(UINavigationController *)secondaryViewController topViewController] detailItem] == nil)) {
+        // Return YES to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
-// global uncaught exception handler
-void uncaughtExceptionHandler(NSException *exception) {
-    
-}
+#pragma mark - Other application events
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -56,17 +76,6 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-}
-
-#pragma mark - Split view
-
-- (BOOL)splitViewController:(UISplitViewController *)splitViewController collapseSecondaryViewController:(UIViewController *)secondaryViewController ontoPrimaryViewController:(UIViewController *)primaryViewController {
-    if ([secondaryViewController isKindOfClass:[UINavigationController class]] && [[(UINavigationController *)secondaryViewController topViewController] isKindOfClass:[DetailViewController class]] && ([(DetailViewController *)[(UINavigationController *)secondaryViewController topViewController] detailItem] == nil)) {
-        // Return YES to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
-        return YES;
-    } else {
-        return NO;
-    }
 }
 
 @end

@@ -8,53 +8,49 @@
 
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
+#import "CrashLoggerLib.h"
+#import "DebugLogger.h"
+#import "ServerLogger.h"
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {
-        @try {
-            return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
-        }
-        // Catch NSExceptions
-        @catch (NSException* exception) {
-            // Converting array of call-stack lines into string (using Fast Enumeration and integer is faster than traditional objectAtIndex)
-            NSMutableString * strCallStackSymbols =[[NSMutableString alloc] init];
-            for (NSString* callStackSymbol in exception.callStackSymbols)
-            {
-                [strCallStackSymbols appendFormat:@"%@\n", callStackSymbol];
-            }
-            
-            // Converting array of call-stack return addresses into string
-            NSMutableString * strCallStack =[[NSMutableString alloc] init];
-            NSUInteger callStackIndex=0;
-            for (NSNumber* callStackReturnAddress in exception.callStackReturnAddresses)
-            {
-                [strCallStack appendFormat:@"%lu\t%@\n",callStackIndex,callStackReturnAddress];
-                callStackIndex++;
-            }
-            
-            // Constructing full exception string info
-            NSMutableString* exceptionString=[[NSMutableString alloc] init];
-            [exceptionString appendFormat:
-             @"Name: %@\n"
-             "Reason: %@\n"
-             "User info: %@\n"
-             "Throwed exception type: %@\n"
-             "Functions stack:\n%@\n"
-             "Functions' return addresses:\n%@\n",
-             exception.name, exception.reason, exception.userInfo, [exception class], strCallStackSymbols, strCallStack];
-            
-            NSLog(@"Exception:\n%@", exceptionString);
-        }
-        // Catch other exception types which are id-type (such as NSString, NSObject). Logging their classes
-        @catch (id exception){
-            NSLog(@"Unhandled exception of type %@", [exception class]);
-        }
-        // Catch other thrown exception types. This one should not ever happen. If it happens, care carefully
-        @catch (...){
-            NSLog(@"Unhandled exception of unknown type");
-        }
-        @finally {
-            NSLog(@"Finally block here [optional]");
-        }
+
+        // TESTING: Log handlers
+        // Registering log handlers. They will receive all logs and handle them.
+        DebugLogger* debugLogger=[[DebugLogger alloc] init];
+        [CRL registerLogHandler:debugLogger withID:@"NSLogger"];
+        
+        ServerLogger* serverLogger=[[ServerLogger alloc]init];
+        [CRL registerLogHandler:serverLogger withID:@"Server Logger"];
+
+        // Testing log handler. It will send this log to all log handlers.
+        [CRL log:@"Log handler worked successfully"];
+
+        // TESTING: two ways of crash catching. Comment or uncomment
+        //#define Without_NSSetUncaughtExceptionHandler
+
+        #ifdef Without_NSSetUncaughtExceptionHandler
+                // Safe way. Note that we catch the global uncaught exception in safe way, also we retrieved ALL the available debug info.
+                // So we can log it to file and send it to server; and we will see user's logs like we see when from our XCode.
+                // Catching uncaught exceptions. Uncaught exceptions go up in exception handling chain, and if there's no exception handler, they reach main() function and get caught there.
+                @try {
+                    return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
+                }
+                @catch (id exception) {
+                    NSLog(@"\n Exception was caught. Logging it\n");
+                    [CRL logObject:exception];
+                }
+                // Catch other exception types. This case should never happen as @throw only accepts object types. If it happens take care carefully
+                @catch (...) {
+                    NSLog(@"Unhandled exception of unknown type");
+                }
+        #else
+                // Note: this one will catch exception but will crash the program at the end.
+                // Note: scroll up the Output window, and notice that log repeats twice.
+                // We could catch exception and fully retrieve ALL debug info and print it, it's the first part. We can log it to file and send to server.
+                // The second part was printed by XCode as usual, because exception was thrown again.
+                return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
+        #endif
+        
     }
 }
