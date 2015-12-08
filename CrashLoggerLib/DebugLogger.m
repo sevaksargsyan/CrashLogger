@@ -18,8 +18,8 @@
 
 - (BOOL) handleObject:(id)object{
     
-    // If it's NSException (or derived type), then convert it to string and log as string
-    if ([object isKindOfClass:[NSException class]]){
+    // If it's NSException, then convert it to string and log as string
+    if ([object isMemberOfClass:[NSException class]]){
         return [self handle:[CrashLoggerUtilities NSExceptionToString:object]];
     } else {
     // Otherwise, try to convert the unknown type to string

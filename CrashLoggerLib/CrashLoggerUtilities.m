@@ -59,11 +59,12 @@
 + (NSString*) ConvertToString: (id) object {
     if (object==nil) return nil;
     
+    // If the object is of type NSString or derives (!) from it, then return the object
     if ([object isKindOfClass:[NSString class]]) {
         return object;
     }
     
-    if ([object isKindOfClass:[NSException class]]){
+    if ([object isMemberOfClass:[NSException class]]){
         return [self NSExceptionToString:object];
     }
     
