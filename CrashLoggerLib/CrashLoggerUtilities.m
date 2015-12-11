@@ -11,7 +11,8 @@
 
 @implementation CrashLoggerUtilities
 
-// Convert NSException to string. Returns nil on failure
+
+// Converts NSException to readable formatted string. Returns nil on failure
 + (NSString*) NSExceptionToString: (NSException*) exception {
     if (exception==nil) return nil;
     
@@ -43,28 +44,40 @@
     //exception.name, exception.reason, exception.userInfo, exception.class, exception.callStackSymbols, exception.callStackReturnAddresses]; // Non-formatted style
     
     /*// Constructing full exception string info (Short info
-    NSMutableString* exceptionString=[[NSMutableString alloc] initWithFormat:
-                                      @"Name: %@\n"
-                                      "Reason: %@\n"
-                                      "User info: %@\n"
-                                      "Throwed exception type: %@\n"
-                                      "Call stack's return addresses:\n%@\n",
-                                      exception.name, exception.reason, exception.userInfo, exception.class, strCallStack];
-    */
+     NSMutableString* exceptionString=[[NSMutableString alloc] initWithFormat:
+     @"Name: %@\n"
+     "Reason: %@\n"
+     "User info: %@\n"
+     "Throwed exception type: %@\n"
+     "Call stack's return addresses:\n%@\n",
+     exception.name, exception.reason, exception.userInfo, exception.class, strCallStack];
+     */
     return exceptionString;
 }
 
+// Converts NSError to readable formatted string. Returns nil on failure
++ (NSString *)NSErrorToString:(NSError *)error {
+    if (error==nil) return nil;
+    return [NSString stringWithFormat:
+            @"Error Domain: %@\n"
+            "Code: %ld\n"
+            "User Info: %@",
+            error.domain, error.code, error.userInfo];
+}
 
 // Tries to convert (exception) object to string. Returns nil on failure
 + (NSString*) ConvertToString: (id) object {
     if (object==nil) return nil;
     
-    // If the object is of type NSString or derives (!) from it, then return the object
     if ([object isKindOfClass:[NSString class]]) {
         return object;
     }
     
-    if ([object isMemberOfClass:[NSException class]]){
+    if ([object isMemberOfClass:[NSError class]]){
+        return [self NSErrorToString:object];
+    }
+    
+    if ([object isKindOfClass:[NSException class]]){
         return [self NSExceptionToString:object];
     }
     
