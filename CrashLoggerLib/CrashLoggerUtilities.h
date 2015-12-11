@@ -11,10 +11,13 @@
 
 @interface CrashLoggerUtilities : NSObject
 
-// Convert NSException to string. Returns nil on failure
+/** Converts NSException to readable formatted string. Returns nil on failure */
 + (NSString*) NSExceptionToString: (NSException*) exception;
 
-// Tries to convert (exception) object to string. Returns nil on failure
+/** Converts NSError to readable formatted string. Returns nil on failure */
++ (NSString*) NSErrorToString: (NSError*) error;
+
+/** Converts known objects (NSException, NSError, NSString) to string. Returns nil on failure */
 + (NSString*) ConvertToString: (id) object;
 
 @end
