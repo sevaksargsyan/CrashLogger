@@ -25,8 +25,8 @@
     UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
     navigationController.topViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
     splitViewController.delegate = self;
-
-    // Set global uncaught exception handler to CrashLogger's handler
+    
+    // Set global uncaught exception handler to CrashLogger's handler. Setting it inside this method (application:didFinish) is considered as good practice. Though we can set it in main().
     NSSetUncaughtExceptionHandler([CRL uncaughtExceptionHandler]);
     return YES;
 }
