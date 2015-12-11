@@ -2,16 +2,16 @@
 //  ServerLogger.h
 //  CrashLogger
 //
-//  Created by Intern on 12/4/15.
+//  Created by SS on 12/4/15.
 //  Copyright © 2015 Macadamian. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "LogHandlingProtocol.h"
+#import "LogHandlerProtocol.h"
 
 @interface ServerLogger : NSObject <LogHandlingProtocol>
 
-- (BOOL) handle: (NSString*) log;
-- (BOOL) handleObject: (id) object;
+- (BOOL) handle:(NSString *)log withLevel:(CRLLogLevel)level withKey:(NSString *)key;
+- (BOOL) handleObject:(id)object withLevel:(CRLLogLevel)level withKey:(NSString *)key;
 
 @end
